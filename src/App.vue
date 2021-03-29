@@ -1,26 +1,39 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import module from "@/assets/js/amap/init"
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      "Map":null
+    }
+  },
+  mounted() {
+    console.log(module)
+    let AMap = module.$data.AMap;
+      let map = new AMap.Map('app', {
+        center: [113.638826,34.742979],
+        layers: [//使用多个图层
+          // new AMap.TileLayer.Satellite(),
+          // new AMap.TileLayer.RoadNet()
+        ],
+        zooms: [4,1000],//设置地图级别范围
+        zoom: 50
+      });
+      console.log(map)
   }
-}
-</script>
+};
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+</script>
+<style type="text/css">
+/*使用高德地图必须设置负责不会显示*/
+body,html,#app{
+  width: 100%;
+  height: 100%;
+  margin: 0px
 }
 </style>
