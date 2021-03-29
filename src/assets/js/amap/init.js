@@ -1,7 +1,6 @@
 import AMapLoader from "@amap/amap-jsapi-loader";
-
-function init(){
-    let ret = null;
+let Map = null;
+function init($el){
     AMapLoader.load({
             "key": "a30d422d821d20fb8e89ef6e05e0404d",              // 申请好的Web端开发者Key，首次调用 load 时必填
             "version": "1.4.15",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
@@ -15,11 +14,23 @@ function init(){
             }
         }
     ).then((AMap)=>{
-        ret = {AMap}
+        Map = new AMap.Map($el, {
+            center: [113.638826,34.742979],
+            layers: [//使用多个图层
+                new AMap.TileLayer.Satellite(),
+                // new AMap.TileLayer.RoadNet()
+            ],
+            zooms: [4,1000],//设置地图级别范围
+            zoom: 50
+        });
+        Map.on('complete', function(){
+            // 地图图块加载完成后触发
+            console.log("map complate");
+        });
     }).catch(e => {
         console.log(e);
     })
-    return ret;
+    return Map
 }
-let AMap = init()
-export default AMap;
+
+export default init;
