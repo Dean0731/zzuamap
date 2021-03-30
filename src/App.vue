@@ -4,19 +4,41 @@
 </template>
 
 <script>
-import init from "./assets/js/amap/init";
+import AMap from "./assets/js/amap/init";
+import {onBeforeMount} from 'vue'
 export default {
-  props:{
-    "map":null
-  },
   setup(){
-    init("app")
+    onBeforeMount(()=>{
+      console.log(AMap)
+      AMap.then(res=>{
+        console.log(res)
+      })
+        // AMapLoader().then((AMap)=>{
+        //   let map = new AMap.Map("app", {
+        //     center: [113.638826,34.742979],
+        //     layers: [//使用多个图层
+        //       new AMap.TileLayer.Satellite(),
+        //       // new AMap.TileLayer.RoadNet()
+        //     ],
+        //     zooms: [4,1000],//设置地图级别范围
+        //     zoom: 10
+        //   });
+        //
+        //   map.on('complete', function(){
+        //     // 地图图块加载完成后触发
+        //     console.log("map complate!");
+        //   });
+        //   ref(null).map = map;
+        //   console.info("new map success:"+map)
+        //   return ref(map)
+        // }).catch(e => {
+        //   console.log(e);
+        // })
+    })
   },
   methods:{
-    changeCenter(){
-      // var position = new AMap.LngLat(116, 39);  // 标准写法
-      // // 简写 var position = [116, 39];
-      // map.setCenter(position);
+    getMap(){
+      console.log(this.$data)
     }
   }
 };
