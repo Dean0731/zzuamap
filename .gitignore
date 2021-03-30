@@ -22,4 +22,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-# git add . && git commit -m "init"  && git push
+# git add . && git commit -m "amap"  && git push
