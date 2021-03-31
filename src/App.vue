@@ -3,25 +3,24 @@
   </div>
 </template>
 <script>
-import init from './assets/js/amap/init'
-import loader from "./assets/js/amap/amap";
-import {onBeforeMount, } from "vue";
+import {init,initMap} from './assets/js/amap/init'
+console.log(initMap,init)
 export default {
-  setup(){
-    onBeforeMount(()=>{
-      let map = init("app")
-      loader.then((AMap)=>{
-        AMap.plugin(['AMap.ToolBar','AMap.MapType'],function(){//异步加载插件
-          var toolbar = new AMap.ToolBar()
-          var mapType = new AMap.MapType()
-          map.then(map=>{
-            map.addControl(toolbar)
-            map.addControl(mapType)
-          })
-        });
-      })
-    })
-
+  data(){
+    return {
+      AMap:null,
+      AMapUI:null,
+      Map:null
+    }
+  },
+  created() {
+    // init(this)
+  },
+  watch:{
+    AMap(){
+      console.log(this.data)
+        // initMap("app",this.AMap)
+    }
   },
   methods:{
     getMap(){
