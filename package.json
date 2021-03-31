@@ -10,6 +10,7 @@
   "dependencies": {
     "amap-js": "^2.2.0",
     "core-js": "3",
+    "element-ui": "^2.15.1",
     "vue": "^2.6.11",
     "vuejs-logger": "^1.5.5"
   },

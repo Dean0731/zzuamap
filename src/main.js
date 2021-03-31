@@ -1,7 +1,10 @@
 import Vue from 'vue'
-import App from './App.vue'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './App.vue';
 import VueLogger from 'vuejs-logger'
 Vue.config.productionTip = false
+Vue.use(ElementUI);
 Vue.use(VueLogger, {
   logLevel: 'debug',
   separator: '|',

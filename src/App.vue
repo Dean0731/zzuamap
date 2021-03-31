@@ -1,11 +1,14 @@
 <template>
   <div id="app">
+    <Search></Search>
+    <div id="map"></div>
   </div>
 </template>
 <script>
 import {init,initMap} from './assets/js/amap/init'
-console.log(initMap,init)
+import Search from "./components/Search";
 export default {
+  components: {Search},
   data(){
     return {
       AMap:null,
@@ -14,12 +17,16 @@ export default {
     }
   },
   created() {
-    // init(this)
+    // 创建AMap,AMapUI,
+    init(this)
   },
   watch:{
     AMap(){
-      console.log(this.data)
-        // initMap("app",this.AMap)
+      // 实例化基础Map
+      initMap("app",this.AMap)
+    },
+    AMapUI(){
+
     }
   },
   methods:{
