@@ -1,5 +1,6 @@
 // 详细配置:https://lbs.amap.com/api/jsapi-v2/documentation
 import {createMarkerByPOI} from "./util";
+import Vue from 'vue'
 export const plugins = [
     'AMap.ToolBar',
         'AMap.MapType',
@@ -66,15 +67,15 @@ export function geolcation(AMap){
     )
     geo.getCurrentPosition(function (status,result){
         if(status=="complete"){
-            console.log("fixed position seccess!")
+            Vue.$log.info("fixed position seccess!")
         }else {
-            alert(result.message)
+            Vue.$log.error(result.message)
         }
     })
     return geo;
 }
 
-export function autoComplete(AMap,map,keyword){
+export function autoComplete(AMap,map){
 
     const autoComplete = new AMap.AutoComplete({
         // 实例化AutoComplete
@@ -84,19 +85,15 @@ export function autoComplete(AMap,map,keyword){
         citylimit:false,
         output:"complete",
      });
-    // 无需再手动执行search方法，autoComplete会根据传入input对应的DOM动态触发search
-    autoComplete.search(keyword,function (staus,result){
-        console.log(result)
-        console.log(staus)
-    })
+    //无需再手动执行search方法，autoComplete会根据传入input对应的DOM动态触发search
     autoComplete.on("select",function(data){
-        console.log(data)
-        if ( data.poi.location != undefined){
+        if ( data.poi.location != undefined || data.poi.location !=  ""){
             //定位到中心点
             map.setCenter(data.poi.location);
             // TODO 获取数据，对数据进行操作如：添加marker等
-            console.log(data.poi)
             map.add(createMarkerByPOI(AMap,data.poi));
+        }else{
+            Vue.$log.debug(data.poi)
         }
     })
     return autoComplete;

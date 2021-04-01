@@ -4,7 +4,11 @@ import {plugins, toolbar, geolcation, scale, mapType, controlBar} from "./config
 export function init(vue){
     new AMapJS.AMapLoader({key: 'a30d422d821d20fb8e89ef6e05e0404d', version: '2.0', plugins: []}).load().then(res=>{
         vue.AMap= res.AMap;
-        new AMapJS.AMapUILoader({version: '1.1'}).load().then(res=>vue.AMapUI = res.AMapUI)
+        vue.$log.debug("AMap load success")
+        new AMapJS.AMapUILoader({version: '1.1'}).load().then(res=>{
+            vue.AMapUI = res.AMapUI
+            vue.$log.debug("AMapUI load success")
+        })
     })
 }
 export function initMap($el,AMap){
@@ -18,7 +22,7 @@ export function initMap($el,AMap){
                 ],
                 // pitch:50,
                 viewMode:'3D',
-                zoom:15
+                zoom:10
             })
     map.plugin(plugins,function(){
         //异步同时加载多个插件
@@ -33,4 +37,5 @@ export function initMap($el,AMap){
         // mousetool.marker();
 
     });
+    return map;
 }

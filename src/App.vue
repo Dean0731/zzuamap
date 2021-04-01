@@ -7,6 +7,7 @@
 <script>
 import {init,initMap} from './assets/js/amap/init'
 import Search from "./components/Search";
+import {search} from "./assets/js/amap/tool";
 import {autoComplete} from "./assets/js/amap/config";
 export default {
   components: {Search},
@@ -14,7 +15,8 @@ export default {
     return {
       AMap:null,
       AMapUI:null,
-      Map:null
+      Map:null,
+      Autocomplete:null,
     }
   },
   created() {
@@ -24,15 +26,22 @@ export default {
   watch:{
     AMap(){
       // 实例化基础Map
-      initMap("app",this.AMap)
+      this.Map = initMap("app",this.AMap)
+      this.$log.debug("Map init success")
+      if(this.Autocomplete == null){
+        this.Autocomplete = autoComplete(this.AMap,this.Map)
+        this.$log.debug("autocomplete load end!")
+      }
     },
     AMapUI(){
 
+    },
+    Map(){
     }
   },
   methods:{
     getSubInput(data){
-      autoComplete(this.AMap,this.Map,data)
+      search(data,this)
     }
   }
 };
