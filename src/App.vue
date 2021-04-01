@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <Search></Search>
+    <Search @getSubInput="getSubInput($event)"></Search>
     <div id="map"></div>
   </div>
 </template>
 <script>
 import {init,initMap} from './assets/js/amap/init'
 import Search from "./components/Search";
+import {autoComplete} from "./assets/js/amap/config";
 export default {
   components: {Search},
   data(){
@@ -30,8 +31,8 @@ export default {
     }
   },
   methods:{
-    getMap(){
-      console.log(this.$data)
+    getSubInput(data){
+      autoComplete(this.AMap,this.Map,data)
     }
   }
 };

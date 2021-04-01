@@ -23,3 +23,5 @@ pnpm-debug.log*
 *.sw?
 
 # git add . && git commit -m "init" && git push
+
+# 插件添加 css

@@ -1,14 +1,13 @@
 import AMapJS from "amap-js";
 import {plugins, toolbar, geolcation, scale, mapType, controlBar} from "./config";
 
-"./config";
-function init(vue){
+export function init(vue){
     new AMapJS.AMapLoader({key: 'a30d422d821d20fb8e89ef6e05e0404d', version: '2.0', plugins: []}).load().then(res=>{
         vue.AMap= res.AMap;
         new AMapJS.AMapUILoader({version: '1.1'}).load().then(res=>vue.AMapUI = res.AMapUI)
     })
 }
-function initMap($el,AMap){
+export function initMap($el,AMap){
     const map = new AMap.Map($el, {
                 center: [113.638826, 34.742979],
                 layers: [
@@ -28,25 +27,10 @@ function initMap($el,AMap){
         map.addControl(controlBar(AMap));
         map.addControl(scale(AMap));
         map.addControl(geolcation(AMap));
+
         // var mousetool = new AMap.MouseTool(map);
         // 使用鼠标工具，在地图上画标记点
         // mousetool.marker();
-        AMap.plugin('AMap.AutoComplete', function(){
-            // let output = document.createElement("div")
 
-            // 实例化AutoComplete
-            var autoOptions = {
-                // input 为绑定输入提示功能的input的DOM ID
-                input: 'input_id',
-                // output:output
-            }
-            var autoComplete= new AMap.AutoComplete(autoOptions);
-            console.log(autoComplete)
-            // 无需再手动执行search方法，autoComplete会根据传入input对应的DOM动态触发search
-        })
     });
 }
-export {init,initMap}
-
-// AMap.ElasticMarker
-//AMap.HawkEye
