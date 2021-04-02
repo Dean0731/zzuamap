@@ -1,14 +1,12 @@
 <template>
   <div id="app">
-    <Search @search="search($event)"></Search>
+    <Search v-bind:vue="vue" ref="search"></Search>
     <div id="map"></div>
   </div>
 </template>
 <script>
-import {init,initMap} from './assets/js/init/init'
+import {init, initMap, initPlugins} from './assets/js/init/init'
 import Search from "./components/Search";
-import {search} from "./assets/js/function/search";
-import {autoComplete} from "./assets/js/plugins/plugins";
 export default {
   components: {Search},
   data(){
@@ -16,8 +14,7 @@ export default {
       AMap:null,
       AMapUI:null,
       Map:null,
-      Autocomplete:null,
-      LabelsLayer:null,
+      vue:this
     }
   },
   created() {
@@ -27,23 +24,16 @@ export default {
   watch:{
     AMap(){
       // 实例化基础Map
-      this.Map = initMap("app",this.AMap)
-      this.$log.debug("Map init success")
-      if(this.Autocomplete == null){
-        this.Autocomplete = autoComplete(this)
-        this.$log.debug("autocomplete load end!")
-      }
+      initMap("app",this)
+      // 为map加载插件
+      initPlugins(this)
+      // 初始化Search
+      this.$refs.search.init()
     },
-    AMapUI(){
 
-    },
-    Map(){
-    }
   },
   methods:{
-    async search(data){
-      search(data,this)
-    }
+
   }
 };
 

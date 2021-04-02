@@ -11,25 +11,30 @@ export function init(vue){
         })
     })
 }
-export function initMap($el,AMap){
-    const map = new AMap.Map($el, {
+export function initMap($el,vue){
+    const map = new vue.AMap.Map($el, {
                 center: [113.638826, 34.742979],
                 layers: [
                     // 默认是交通地图
                     //使用多个图层,也可以后面使用map.add 添加新图层
-                    new AMap.TileLayer.Satellite(), // 街道地图
-                    new AMap.TileLayer.RoadNet() // 道路地图
+                    new vue.AMap.TileLayer.Satellite(), // 街道地图
+                    new vue.AMap.TileLayer.RoadNet() // 道路地图
                 ],
                 // pitch:50,
                 viewMode:'3D',
                 zoom:10
             })
-    map.plugin(plugins,function(){
+    vue.$log.debug("Map init success")
+    vue.Map = map;
+    return map;
+}
+export  function initPlugins(vue){
+    vue.Map.plugin(plugins,function(){
         //异步同时加载多个插件
-        map.addControl(mapType(AMap));
-        map.addControl(toolbar(AMap));
-        map.addControl(controlBar(AMap));
-        map.addControl(scale(AMap));
+        vue.Map.addControl(mapType(vue));
+        vue.Map.addControl(toolbar(vue));
+        vue.Map.addControl(controlBar(vue));
+        vue.Map.addControl(scale(vue));
         // map.addControl(geolcation(AMap));
 
         // var mousetool = new AMap.MouseTool(map);
@@ -37,5 +42,5 @@ export function initMap($el,AMap){
         // mousetool.marker();
 
     });
-    return map;
+    vue.$log.debug("Map plugins init success")
 }

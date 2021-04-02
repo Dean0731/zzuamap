@@ -2,7 +2,6 @@
 export function successMessage(data){
     return {showClose: true, message: data, type: 'success'}
 }
-
 export function errorMessage(data){
     return {showClose: true, message: data, type: 'error'}
 }
