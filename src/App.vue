@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <Search @getSubInput="getSubInput($event)"></Search>
+    <Search @search="search($event)"></Search>
     <div id="map"></div>
   </div>
 </template>
 <script>
-import {init,initMap} from './assets/js/amap/init'
+import {init,initMap} from './assets/js/init/init'
 import Search from "./components/Search";
-import {search} from "./assets/js/amap/tool";
-import {autoComplete} from "./assets/js/amap/config";
+import {search} from "./assets/js/function/search";
+import {autoComplete} from "./assets/js/plugins/plugins";
 export default {
   components: {Search},
   data(){
@@ -17,6 +17,7 @@ export default {
       AMapUI:null,
       Map:null,
       Autocomplete:null,
+      LabelsLayer:null,
     }
   },
   created() {
@@ -29,7 +30,7 @@ export default {
       this.Map = initMap("app",this.AMap)
       this.$log.debug("Map init success")
       if(this.Autocomplete == null){
-        this.Autocomplete = autoComplete(this.AMap,this.Map)
+        this.Autocomplete = autoComplete(this)
         this.$log.debug("autocomplete load end!")
       }
     },
@@ -40,7 +41,7 @@ export default {
     }
   },
   methods:{
-    getSubInput(data){
+    async search(data){
       search(data,this)
     }
   }

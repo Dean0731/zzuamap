@@ -1,6 +1,6 @@
 import AMapJS from "amap-js";
-import {plugins, toolbar, geolcation, scale, mapType, controlBar} from "./config";
-
+import {plugins, toolbar, scale, mapType, controlBar} from "../plugins/plugins";
+// import {geolcation} from './init'
 export function init(vue){
     new AMapJS.AMapLoader({key: 'a30d422d821d20fb8e89ef6e05e0404d', version: '2.0', plugins: []}).load().then(res=>{
         vue.AMap= res.AMap;
@@ -30,7 +30,7 @@ export function initMap($el,AMap){
         map.addControl(toolbar(AMap));
         map.addControl(controlBar(AMap));
         map.addControl(scale(AMap));
-        map.addControl(geolcation(AMap));
+        // map.addControl(geolcation(AMap));
 
         // var mousetool = new AMap.MouseTool(map);
         // 使用鼠标工具，在地图上画标记点

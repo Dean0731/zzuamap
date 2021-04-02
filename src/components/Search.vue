@@ -5,10 +5,10 @@
           id = "input_id"
           v-model="input"
           placeholder="请输入城市名"
-          @keypress.enter.native="toParent()">
+          @keypress.enter.native="search()">
         <el-button
             slot="append" icon="el-icon-search"
-            @click="toParent()"
+            @click="search()"
             style="background-color: white;font-size: 28px;margin-right:-25px;">
         </el-button>
         <el-button
@@ -31,8 +31,8 @@ export default {
     }
   },
   methods:{
-    toParent:function (){
-      this.$emit("getSubInput",this.input)
+    search:function (){
+      this.$emit("search",this.input)
       this.$log.debug("search toparent")
     }
   }
