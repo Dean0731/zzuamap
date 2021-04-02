@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <el-main id="app">
     <Search v-bind:vue="vue" ref="search"></Search>
-    <div id="map"></div>
-  </div>
+    <el-row id="map"></el-row>
+  </el-main>
 </template>
 <script>
 import {init, initMap, initPlugins} from './assets/js/init/init'
@@ -43,6 +43,7 @@ export default {
 body,html,#app{
   width: 100%;
   height: 100%;
-  margin: 0px
+  margin: 0px;
+  padding: 0px;
 }
 </style>

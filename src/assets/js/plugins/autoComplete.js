@@ -14,27 +14,32 @@ export default function autoComplete(vue,search){
     });
     //无需再手动执行search方法，autoComplete会根据传入input对应的DOM动态触发search
     autoComplete.on("select",function(data){
-        vue.Map.removeLayer(search.LabelsLayer)
-        // data只有一个 都是有直接坐标的
-        if (data.poi.location !=  ""){
-            //定位到中心点
-            vue.Map.setZoomAndCenter(15,data.poi.location);
-            // TODO 获取数据，对数据进行操作如：添加marker等
-            search.LabelsLayer = createMarkerByLocation(vue.AMap,data.poi.location)
-            vue.Map.add(search.LabelsLayer);
-        }else{
-            let url = new URLBuilder().
-            scheam("https").
-            host(URL_POI_SEARCH).
-            addQuery("key",KEY_WEB).
-            addQuery("offset",1).
-            addQuery("keywords",data.poi.name).builder()
-            axios.get(url).then(res=>{
-                vue.Map.setZoomAndCenter(15,res);
-                vue.$message(successMessage("切换到"+data.poi.name))
-            })
-        }
+        changeToLocation(vue,search,data.poi)
     })
     vue.$log.debug("autocomplete load end!")
     return autoComplete;
+}
+
+export function changeToLocation(vue,search,poi){
+
+    vue.Map.removeLayer(search.LabelsLayer)
+    // data只有一个 都是有直接坐标的
+    if (poi.location !=  ""){
+        //定位到中心点
+        vue.Map.setZoomAndCenter(15,poi.location);
+        // TODO 获取数据，对数据进行操作如：添加marker等
+        search.LabelsLayer = createMarkerByLocation(vue.AMap,poi.location)
+        vue.Map.add(search.LabelsLayer);
+    }else{
+        let url = new URLBuilder().
+        scheam("https").
+        host(URL_POI_SEARCH).
+        addQuery("key",KEY_WEB).
+        addQuery("offset",1).
+        addQuery("keywords",poi.name).builder()
+        axios.get(url).then(res=>{
+            vue.Map.setZoomAndCenter(15,res);
+            vue.$message(successMessage("切换到"+poi.name))
+        })
+    }
 }

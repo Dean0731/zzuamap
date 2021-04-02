@@ -5,8 +5,7 @@
           id = "input_id"
           v-model="input"
           placeholder="请输入城市名"
-          @focus="removePois"
-      >
+          @focus="removePois">
         <!--          @keypress.enter.native="search()"-->
         <el-button
             slot="append" icon="el-icon-search"
@@ -18,31 +17,26 @@
             style="background-color: white;font-size: 28px;margin-left: -25px">
         </el-button>
       </el-input>
-      <el-row v-for='(value) in pois' :key='value.index' style="background-color: white;padding: 5px 0px 5px 30px">
+      <el-row v-for='(value) in pois' :key='value.index' style="background-color: white;padding: 5px 0px 5px 30px;height: 80px;" @click.native="changeToLocation(value.location)">
         <template v-if="value.photos[0] !== undefined ">
-          <el-row style="height: 70px;background-color: white;width: 100%">
-            <el-col :span="10">
-              <el-image :src="value.photos[0].url" style="height: 70px;width: 70px"/>
+            <el-col :span="6">
+              <el-image
+                  :src="value.photos[0].url"
+                  fit="cover"
+                  style="width: 70px;height: 70px;"/>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="14">
               {{value.address}}
             </el-col>
-          </el-row>
         </template>
         <template v-else>
-          <el-row style="width:100%;height: 70px;background-color: white;">
             {{value.address}}
-          </el-row>
         </template>
-        <!--      <div style="width:100%;font-size: 15px">-->
-        <!--        {{value.address}}-->
-        <!--        <hr/>-->
-        <!--      </div>-->
       </el-row>
     </el-main>
-    <div id="complete">
+    <el-row id="complete">
 
-    </div>
+    </el-row>
 
 
   </el-main>
@@ -51,6 +45,7 @@
 import Vue from 'vue'
 import {search} from "../assets/js/function/search";
 import {autoComplete} from "../assets/js/plugins/plugins";
+import {changeToLocation} from "../assets/js/plugins/autoComplete";
 export default {
   name: "Search",
   props:{
@@ -77,6 +72,9 @@ export default {
     },
     removePois(){
       this.pois = null;
+    },
+    changeToLocation(data){
+      changeToLocation(this.vue,this,data)
     }
   }
 }
