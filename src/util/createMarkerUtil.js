@@ -1,4 +1,4 @@
-import {SERACH_IMAGE_INDEX} from "../config";
+import {SERACH_IMAGE_INDEX} from "../config/config";
 export function locationStrToPxPy(locationstr){
     // "px,px"  ->  [px,py]
     let px_py = locationstr.split(",")

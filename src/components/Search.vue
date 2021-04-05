@@ -35,25 +35,15 @@
       </el-row>
     </el-main>
     <el-row id="complete">
-
     </el-row>
-
-
   </el-main>
 </template>
 <script>
-import Vue from 'vue'
-import {search} from "../assets/js/function/search";
-import {autoComplete} from "../assets/js/plugins/plugins";
-import {changeToLocation} from "../assets/js/plugins/autoComplete";
+import {search} from "../function/search";
+import {autoComplete} from "../plugins/plugins";
+import {changeToLocation} from "../plugins/autoComplete";
 export default {
   name: "Search",
-  props:{
-    vue:{
-      type: Vue,
-      default:null
-    }
-  },
   data() {
     return {
       LabelsLayer:null,
@@ -65,16 +55,16 @@ export default {
   },
   methods:{
     search:async function (){
-      search(this.vue,this)
+      search(this)
     },
     init(){
-      autoComplete(this.vue,this)
+      autoComplete(this)
     },
     removePois(){
       this.pois = null;
     },
     changeToLocation(data){
-      changeToLocation(this.vue,this,data)
+      changeToLocation(this,data)
     }
   }
 }

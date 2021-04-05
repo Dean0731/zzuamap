@@ -1,40 +1,19 @@
 <template>
   <el-main id="app">
-    <Search v-bind:vue="vue" ref="search"></Search>
+<!--    <Search ref="search"></Search>-->
     <el-row id="map"></el-row>
   </el-main>
 </template>
 <script>
-import {init, initMap, initPlugins} from './assets/js/init/init'
-import Search from "./components/Search";
+import {init,} from './config/init'
+// import Search from "./components/Search";
 export default {
-  components: {Search},
-  data(){
-    return {
-      AMap:null,
-      AMapUI:null,
-      Map:null,
-      vue:this
-    }
-  },
-  created() {
-    // 创建AMap,AMapUI,
-    init(this)
-  },
-  watch:{
-    AMap(){
-      // 实例化基础Map
-      initMap("app",this)
-      // 为map加载插件
-      initPlugins(this)
-      // 初始化Search
-      this.$refs.search.init()
-    },
+  // components: {Search},
 
+  mounted() {
+    init("app")
+    // this.$refs.search.init()
   },
-  methods:{
-
-  }
 };
 
 </script>
