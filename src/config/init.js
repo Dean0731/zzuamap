@@ -1,43 +1,51 @@
-import AMapJS from "amap-js";
+import AMapLoader from '@amap/amap-jsapi-loader';
 import Vue from 'vue'
-
 import {plugins, toolbar, scale, mapType, controlBar} from "../plugins/plugins";
+import {INIT_POS} from "./config";
 // import {geolcation} from './init'
-export function init($el){
-    new AMapJS.AMapLoader({key: 'a30d422d821d20fb8e89ef6e05e0404d', version: '2.0', plugins: []}).load().then(res=>{
-        Vue.prototype.$AMap= res.AMap;
-        Vue.$log.debug(Vue.AMap,res.AMap)
-        Vue.$log.debug("AMap load success")
-        new AMapJS.AMapUILoader({version: '1.1'}).load().then(res=>{
-            Vue.prototype.AMapUI = res.AMapUI
-            Vue.$log.debug("AMapUI load success")
-            initMap($el)
-            initPlugins()
-        })
+
+export function init($el,vue){
+    AMapLoader.load({
+        "key": "a30d422d821d20fb8e89ef6e05e0404d",              // 申请好的Web端开发者Key，首次调用 load 时必填
+        "version": "2.0",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        "plugins": [],           // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+        // "AMapUI": {             // 是否加载 AMapUI，缺省不加载
+        //     "version": '1.1',   // AMapUI 缺省 1.1
+        //     "plugins":[],       // 需要加载的 AMapUI ui插件
+        // },
+        // "Loca":{                // 是否加载 Loca， 缺省不加载
+        //     "version": '1.3.2'  // Loca 版本，缺省 1.3.2
+        // },
+    }).then((AMap)=>{
+        Vue.prototype.AMap=AMap;
+        initMap($el,vue)
+        initPlugins(vue)
+    }).catch(e => {
+        vue.$log.error(e);
     })
 }
-function initMap($el){
-    Vue.prototype.Map = new Vue.AMap.Map($el, {
-                center: [113.638826, 34.742979],
+function initMap($el,vue){
+    Vue.prototype.Map = new vue.AMap.Map($el, {
+                center: INIT_POS,
                 layers: [
                     // 默认是交通地图
                     //使用多个图层,也可以后面使用map.add 添加新图层
-                    new Vue.AMap.TileLayer.Satellite(), // 街道地图
-                    new Vue.AMap.TileLayer.RoadNet() // 道路地图
+                    new vue.AMap.TileLayer.Satellite(), // 街道地图
+                    new vue.AMap.TileLayer.RoadNet() // 道路地图
                 ],
                 // pitch:50,
                 viewMode:'3D',
-                zoom:10
+                zoom:15
             })
-    Vue.$log.debug("Map init success")
+    vue.$log.debug("Map init success")
 }
-function initPlugins(){
-    Vue.Map.plugin(plugins,function(){
+function initPlugins(vue){
+    vue.Map.plugin(plugins,function(){
         //异步同时加载多个插件
-        Vue.Map.addControl(mapType());
-        Vue.Map.addControl(toolbar());
-        Vue.Map.addControl(controlBar());
-        Vue.Map.addControl(scale());
+        vue.Map.addControl(mapType(vue));
+        vue.Map.addControl(toolbar(vue));
+        vue.Map.addControl(controlBar(vue));
+        vue.Map.addControl(scale(vue));
         // map.addControl(geolcation(AMap));
 
         // var mousetool = new AMap.MouseTool(map);
@@ -45,5 +53,5 @@ function initPlugins(){
         // mousetool.marker();
 
     });
-    Vue.$log.debug("Map plugins init success")
+    vue.$log.debug("Map plugins init success")
 }

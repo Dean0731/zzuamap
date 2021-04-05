@@ -1,18 +1,17 @@
 <template>
   <el-main id="app">
-<!--    <Search ref="search"></Search>-->
+    <Search></Search>
+    <router-view></router-view>
     <el-row id="map"></el-row>
   </el-main>
 </template>
 <script>
-import {init,} from './config/init'
-// import Search from "./components/Search";
+import {init} from './config/init'
+import Search from "./components/Search";
 export default {
-  // components: {Search},
-
+  components: {Search},
   mounted() {
-    init("app")
-    // this.$refs.search.init()
+    init("app",this)
   },
 };
 

@@ -1,15 +1,14 @@
 <template>
-  <el-main id="search">
-    <el-main style="padding: 10px;background-color: white">
+  <el-col :span="5" id="search">
       <el-input
           id = "input_id"
           v-model="input"
           placeholder="请输入城市名"
-          @focus="removePois">
-        <!--          @keypress.enter.native="search()"-->
+          @keypress.enter.native="search"
+          @input="complete">
         <el-button
             slot="append" icon="el-icon-search"
-            @click="search()"
+            @click="search"
             style="background-color: white;font-size: 28px;margin-right:-25px;">
         </el-button>
         <el-button
@@ -17,54 +16,27 @@
             style="background-color: white;font-size: 28px;margin-left: -25px">
         </el-button>
       </el-input>
-      <el-row v-for='(value) in pois' :key='value.index' style="background-color: white;padding: 5px 0px 5px 30px;height: 80px;" @click.native="changeToLocation(value.location)">
-        <template v-if="value.photos[0] !== undefined ">
-            <el-col :span="6">
-              <el-image
-                  :src="value.photos[0].url"
-                  fit="cover"
-                  style="width: 70px;height: 70px;"/>
-            </el-col>
-            <el-col :span="14">
-              {{value.address}}
-            </el-col>
-        </template>
-        <template v-else>
-            {{value.address}}
-        </template>
-      </el-row>
-    </el-main>
-    <el-row id="complete">
-    </el-row>
-  </el-main>
+  </el-col>
+
 </template>
 <script>
-import {search} from "../function/search";
-import {autoComplete} from "../plugins/plugins";
-import {changeToLocation} from "../plugins/autoComplete";
+import {URL_SEARCH_COMPLETE, URL_SEARCH_LIST} from "../routers/router";
 export default {
   name: "Search",
   data() {
     return {
       LabelsLayer:null,
       input: "",
-      fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
       pois:null
     }
   },
   methods:{
     search:async function (){
-      search(this)
+      // search(this)
+      this.$router.push({path: URL_SEARCH_LIST, query: {keyword:this.input}})
     },
-    init(){
-      autoComplete(this)
-    },
-    removePois(){
-      this.pois = null;
-    },
-    changeToLocation(data){
-      changeToLocation(this,data)
+    complete(){
+      this.$router.push({path: URL_SEARCH_COMPLETE, query: {keyword:this.input}})
     }
   }
 }
@@ -72,14 +44,16 @@ export default {
 
 <style scoped>
   #search{
-    width: 23%;
+    height: 55px;
     position: fixed;
     z-index: 9999;
+    padding:5px;
+    vertical-align: center;
+    margin: 10px 0px 0px 20px;
+    background-color: #ffffff;
   }
   #search>>>.el-input__inner{
     border: none;
-    height: 30px;
-    font-size: 17px;
     padding-left: 10px;
   }
   #complete{

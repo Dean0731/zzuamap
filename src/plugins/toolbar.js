@@ -1,7 +1,7 @@
-import Vue from 'vue'
+
 // 放大缩小
-export default function toolbar(){
-    const toolBar = new Vue.AMap.ToolBar({
+export default function toolbar(vue){
+    const toolBar = new vue.AMap.ToolBar({
         offset: [75,25],
         position: 'RB',
 

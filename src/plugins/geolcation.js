@@ -1,7 +1,7 @@
-import Vue from 'vue'
+
 // 定位按钮设置
-export default function geolcation(){
-    const geo = new Vue.AMap.Geolocation(
+export default function geolcation(vue){
+    const geo = new vue.AMap.Geolocation(
         {
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
             timeout: 10000,          //超过10秒后停止定位，默认：无穷大
@@ -16,14 +16,14 @@ export default function geolcation(){
             panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
             zoomToAccuracy:false,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
             // markerOptions:new AMap.Marker({}),
-            circleOptions:new Vue.AMap.Circle({})
+            circleOptions:new vue.AMap.Circle({})
         }
     )
     geo.getCurrentPosition(function (status,result){
         if(status=="complete"){
-            Vue.$log.info("fixed position seccess!")
+            vue.$log.info("fixed position seccess!")
         }else {
-            Vue.$log.error(result.message)
+            vue.$log.error(result.message)
         }
     })
     return geo;
