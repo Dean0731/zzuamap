@@ -1,23 +1,22 @@
 <template>
-    <el-main id="searchList">
+      <el-col id="searchList" :span="5">
         <el-menu
             v-for="(place,index) in places"
             v-bind:key="index">
           <el-menu-item index="index">
-            <el-row slot="title">{{place.address}}</el-row>
+              <el-col :span="2">12</el-col>
+              <el-col :span="20" :offset="2">{{place.address}}</el-col>
           </el-menu-item>
         </el-menu>
         <el-pagination
-            background
+            small
             :page-size="page_size"
             :hide-on-single-page="value"
             @current-change="getPlacesList"
             layout="prev, pager, next"
             :total="total">
         </el-pagination>
-    </el-main>
-
-
+      </el-col>
 </template>
 <script>
 import {search} from "../function/search";
@@ -30,7 +29,7 @@ export default {
       total:0,
       input:'',
       value:true,
-      page_size:20
+      page_size:8
     }
   },
   created() {
@@ -69,12 +68,12 @@ export default {
 }
 
 #searchList{
-  width: 21%;
   max-height: 80%;
+  padding:0px ;
   top:60px;
   position: fixed;
   z-index: 9999;
-  padding:5px 20px 0px 20px;
+  padding:0px;
   vertical-align: center;
   margin-left:20px;
   background-color: #ffffff;

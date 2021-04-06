@@ -1,7 +1,6 @@
 <template>
   <el-main id="app">
     <Search></Search>
-    <router-view></router-view>
     <el-row id="map"></el-row>
   </el-main>
 </template>

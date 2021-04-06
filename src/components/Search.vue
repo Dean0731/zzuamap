@@ -1,5 +1,6 @@
 <template>
-  <el-col :span="5" id="search">
+  <el-row>
+    <el-col :span="5" id="search">
       <el-input
           id = "input_id"
           v-model="input"
@@ -9,15 +10,18 @@
         <el-button
             slot="append" icon="el-icon-search"
             @click="search"
-            style="background-color: white;font-size: 28px;margin-right:-25px;">
+            style="background-color: white;font-size: 15px;">
         </el-button>
         <el-button
             slot="prepend" icon="el-icon-map-location"
-            style="background-color: white;font-size: 28px;margin-left: -25px">
+            style="background-color: white;font-size: 15px;">
         </el-button>
       </el-input>
-  </el-col>
-
+    </el-col>
+    <el-col>
+      <router-view></router-view>
+    </el-col>
+  </el-row>
 </template>
 <script>
 import {URL_SEARCH_COMPLETE, URL_SEARCH_LIST} from "../routers/router";

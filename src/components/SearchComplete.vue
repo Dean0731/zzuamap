@@ -39,10 +39,8 @@ export default {
   top:60px;
   position: fixed;
   z-index: 9999;
-  padding:5px 20px 0px 20px;
   vertical-align: center;
   margin-left:20px;
   background-color: #ffffff;
 }
-
 </style>

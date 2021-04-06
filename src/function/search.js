@@ -5,7 +5,7 @@ export function search(pageNumber,vue){
     let url = new URLBuilder()
         .scheam("https").host(URL_POI_SEARCH)
         .addQuery("key",KEY_WEB)
-        .addQuery("offset",20)
+        .addQuery("offset",8)
         .addQuery("page",pageNumber)
         .addQuery("keywords",vue.input).builder()
     // addQuery("citylimit",true)
