@@ -1,46 +1,59 @@
 <template>
   <el-row>
     <el-col :span="5" id="search">
-      <el-input
-          id = "input_id"
-          v-model="input"
-          placeholder="请输入城市名"
-          @keypress.enter.native="search"
-          @input="complete">
-        <el-button
-            slot="append" icon="el-icon-search"
-            @click="search"
-            style="background-color: white;font-size: 15px;">
-        </el-button>
-        <el-button
-            slot="prepend" icon="el-icon-map-location"
-            style="background-color: white;font-size: 15px;">
-        </el-button>
-      </el-input>
-    </el-col>
-    <el-col>
-      <router-view></router-view>
+      <el-col :span="4" class="ico">
+        <i class="el-icon-map-location"></i>
+      </el-col>
+      <el-col :span="16">
+        <el-input
+            id = "input_id"
+            v-model="input"
+            placeholder="请输入城市名"
+            @keypress.enter.native="search"
+            @input="complete">
+        </el-input>
+      </el-col>
+      <el-col :span="4" class="ico">
+        <span
+            class="el-icon-search"
+            @click="search">
+        </span>
+      </el-col>
+      <el-col>
+<!--        <router-view ref="view"></router-view>-->
+        <SearchList :input="input" v-show="showSearchList" ref="searchList"></SearchList>
+        <SearchComplete :input="input" v-show="showSearchComplete" ref="searchComplete"></SearchComplete>
+      </el-col>
     </el-col>
   </el-row>
 </template>
 <script>
-import {URL_SEARCH_COMPLETE, URL_SEARCH_LIST} from "../routers/router";
+import SearchList from "./SearchList";
+import SearchComplete from "./SearchComplete";
 export default {
   name: "Search",
+  components: {SearchList,SearchComplete},
   data() {
     return {
-      LabelsLayer:null,
       input: "",
-      pois:null
+      showSearchList:false,
+      showSearchComplete:false,
     }
   },
   methods:{
-    search:async function (){
-      // search(this)
-      this.$router.push({path: URL_SEARCH_LIST, query: {keyword:this.input}})
+    search(){
+      if(this.showSearchComplete==true){
+        this.showSearchComplete=false
+      }
+      this.showSearchList = true;
+      this.$refs.searchList.search()
     },
-    complete(){
-      this.$router.push({path: URL_SEARCH_COMPLETE, query: {keyword:this.input}})
+    async complete(){
+      if(this.showSearchList==true){
+        this.showSearchList=false;
+      }
+      this.showSearchComplete = true;
+      this.$refs.searchComplete.search(this.input)
     }
   }
 }
@@ -48,29 +61,21 @@ export default {
 
 <style scoped>
   #search{
-    height: 55px;
+    /*border: 1px red solid;*/
+    height: 4.31%;
     position: fixed;
     z-index: 9999;
-    padding:5px;
+    /*padding:5px;*/
     vertical-align: center;
-    margin: 10px 0px 0px 20px;
+    margin: 0.5% 0.5% 0.5% 1%;
     background-color: #ffffff;
   }
   #search>>>.el-input__inner{
     border: none;
-    padding-left: 10px;
+    /*padding-left: 10px;*/
   }
-  #complete{
-    -webkit-appearance: none;
-    background-color: #fff;
-    background-image: none;
-    box-sizing: border-box;
-    color: #606266;
-    font-size: 50px;
-    line-height: 40px;
-    outline: 0;
-    padding: 0 10%;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    width: 100%;
+  .ico{
+    text-align: center;font-size:30px;
+    cursor: pointer;
   }
 </style>

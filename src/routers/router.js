@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 import SearchList from "../components/SearchList"
 import SearchComplete from "../components/SearchComplete";
 export const URL_SEARCH_LIST = "/searchList"
-export const URL_SEARCH_COMPLETE = "/searchCompltet"
+export const URL_SEARCH_COMPLETE = "/searchComplete"
 
 const routes = [
     { path: URL_SEARCH_LIST, component: SearchList },

@@ -1,44 +1,53 @@
 <template>
+  <el-collapse-transition>
       <el-col id="searchList" :span="5">
-        <el-menu
-            v-for="(place,index) in places"
-            v-bind:key="index">
-          <el-menu-item index="index">
-              <el-col :span="2">12</el-col>
-              <el-col :span="20" :offset="2">{{place.address}}</el-col>
-          </el-menu-item>
-        </el-menu>
+          <el-row
+              v-for="(place,index) in places"
+              v-bind:key="index"
+              @keypress.enter.native="location(place)"
+              @click.native="location(place)">
+              <el-col :span="4">
+                <el-image src="/favicon.ico"></el-image>
+              </el-col>
+              <el-col :span="20">{{place.address}}</el-col>
+          </el-row>
         <el-pagination
-            small
             :page-size="page_size"
             :hide-on-single-page="value"
+            :current-page.sync="current_page"
             @current-change="getPlacesList"
             layout="prev, pager, next"
             :total="total">
         </el-pagination>
       </el-col>
+  </el-collapse-transition>
 </template>
 <script>
 import {search} from "../function/search";
 
 export default {
   name: "SearchList",
+  props:['input'],
   data(){
     return {
       places:[],
       total:0,
-      input:'',
+      current_page:1,
+      // input:'',
       value:true,
       page_size:8
     }
   },
-  created() {
-    this.input = this.$route.query.keyword
-    this.getPlacesList(1)
-  },
   methods:{
+    search(){
+      this.current_page=1
+      this.getPlacesList(1)
+    },
     getPlacesList(pageNumber){
-      search(pageNumber,this)
+      search(pageNumber,this.input,this)
+    },
+    location(place){
+      this.$message(place.address)
     }
   }
 }
@@ -69,19 +78,19 @@ export default {
 
 #searchList{
   max-height: 80%;
-  padding:0px ;
-  top:60px;
   position: fixed;
   z-index: 9999;
-  padding:0px;
   vertical-align: center;
-  margin-left:20px;
   background-color: #ffffff;
+  overflow-y: scroll;
 }
-.el-menu-item{
-  display: table-cell;
+.el-row{
+  margin: 0 4% 0 4%;
   vertical-align: middle;
-  line-height: 1.2;
-  white-space: pre-line;
+  height: 100px;
+}
+.el-row:hover{
+  background-color: #D2E8F5;
+  cursor: pointer;
 }
 </style>
