@@ -23,6 +23,7 @@
 <!--        <router-view ref="view"></router-view>-->
         <SearchList :input="input" v-show="showSearchList" ref="searchList"></SearchList>
         <SearchComplete :input="input" v-show="showSearchComplete" ref="searchComplete"></SearchComplete>
+        <el-col id="title" :span="5" style="font-size: 20px;color: cornflowerblue;text-align: center" v-if="showSearchList==true" @click.native="hide">{{data}}</el-col>
       </el-col>
     </el-col>
   </el-row>
@@ -36,12 +37,21 @@ export default {
   components: {SearchList,SearchComplete},
   data() {
     return {
+      data:"显示结果",
       input: "",
       showSearchList:false,
       showSearchComplete:false,
     }
   },
   methods:{
+    hide(){
+      if(this.data=="隐藏结果"){
+        this.data ="显示结果";
+      }else{
+        this.showSearchList = false;
+        this.data = "隐藏结果";
+      }
+    },
     search(){
       this.$refs.searchList.search().then(res=>{
         if(res.data.status==1){
@@ -89,5 +99,9 @@ export default {
   .ico{
     text-align: center;font-size:30px;
     cursor: pointer;
+  }
+  #title{
+    position: relative;
+    z-index: 9999;
   }
 </style>

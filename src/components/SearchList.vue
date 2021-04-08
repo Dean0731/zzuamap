@@ -1,35 +1,49 @@
 <template>
   <el-collapse-transition>
-      <el-col id="searchList" :span="5"
-      >
+      <el-col id="searchList" :span="5">
+        <el-col :span="24">
           <el-row
               v-for="(place,index) in places"
-              v-bind:key="index"
-              @keypress.enter.native="location(place)"
-              @click.native="location(place)">
-              <el-col :span="20">
+              v-bind:key="index">
+              <el-col :span="18"
+                      @keypress.enter.native="location(place)"
+                      @click.native="location(place)"
+              >
                 <el-col :span="24">{{index+1}} {{place.name}}</el-col>
                 <el-col :span="24" v-if="place.address!=''">
                   <span style="font-size: 10px;color: #C0C4CC;">
                     {{place.address}}
                   </span>
+                  <el-col v-if="place.tel!=''">
+                    <span style="font-size: 10px;color: #C0C4CC;">
+                    电话:{{place.tel}}
+                  </span>
+                  </el-col>
                 </el-col>
               </el-col>
-              <el-col :span="4">
-                <el-image :src="place.photos[0].url" v-if="place.photos.length!=0"></el-image>
+              <el-col :span="6">
+                <el-image :src="place.photos[0].url"
+                          v-if="place.photos.length!=0"
+                          :preview-src-list="urlList(place)"
+                          lazy style="width: 80px;height: 80px"
+                ></el-image>
               </el-col>
           </el-row>
-        <el-pagination
-            style="text-align: center"
-            :page-size="page_size"
-            :pager-count="5"
-            :hide-on-single-page="value"
-            :current-page.sync="current_page"
-            @current-change="getPlacesList"
-            layout="prev, pager, next"
-            :total="total">
-        </el-pagination>
+        </el-col>
+        <el-col :span="24">
+          <el-pagination
+              style="text-align: center"
+              :page-size="page_size"
+              :pager-count="5"
+              :hide-on-single-page="value"
+              :current-page.sync="current_page"
+              @current-change="getPlacesList"
+              layout="prev, pager, next"
+              :total="total">
+          </el-pagination>
+        </el-col>
       </el-col>
+
   </el-collapse-transition>
 </template>
 <script>
@@ -61,7 +75,12 @@ export default {
       })
     },
     location(place){
-      this.$message(place.address)
+      this.$store.state.Location(place,this)
+    },
+    urlList(place){
+      return place.photos.map(photo=>{
+        return photo.url;
+      })
     },
   }
 }
@@ -100,7 +119,7 @@ export default {
 }
 .el-row{
   margin: 0 4% 0 4%;
-  padding:  5% 0 2% 0;
+  padding:  2% 0 2% 0;
   vertical-align: middle;
   height: 100px;
 }

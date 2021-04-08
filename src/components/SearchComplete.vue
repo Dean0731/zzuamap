@@ -15,8 +15,6 @@
   </el-collapse-transition>
 </template>
 <script>
-import {autoComplete} from "../plugins/plugins";
-
 export default {
   name: "Complete",
   data(){
@@ -26,14 +24,21 @@ export default {
       autoComplete:this.AMap,
     }
   },
-  watch(){
-    autoComplete(){
-      this.input = this.$route.params.keyword
-      this.autoComplete = new this.AMap.AutoComplete({
+  created() {
+    this.input = this.$route.params.keyword
+  },
+  watch:{
+    getAMap(){
+      this.autoComplete = new this.$store.state.AMap.AutoComplete({
         // city:"郑州",
         citylimit:false,
       });
       this.$log.debug("autocomplete init success")
+    }
+  },
+  computed:{
+    getAMap(){
+      return this.$store.state.AMap;
     }
   },
   methods:{
@@ -44,9 +49,9 @@ export default {
         }
       })
     },
-    location(place){
-      this.$message(place.name)
-    },
+    location(place) {
+      this.$store.state.Location(place,this)
+    }
   }
 }
 </script>

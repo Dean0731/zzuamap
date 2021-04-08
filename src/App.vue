@@ -1,14 +1,16 @@
 <template>
   <el-main id="app">
     <Search></Search>
+    <Menu></Menu>
     <el-row id="map"></el-row>
   </el-main>
 </template>
 <script>
 import {init} from './config/init'
 import Search from "./components/Search";
+import Menu from "./components/Menu";
 export default {
-  components: {Search},
+  components: {Search,Menu},
   mounted() {
     init("app",this)
   },

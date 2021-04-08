@@ -24,6 +24,7 @@ export const SERACH_IMAGE_INDEX = {
     18:[718,178],
     19:[816,178],
     20:[280,6],
+    21:[718,6],
 }
 
 export const URL_QUERY_LOCATION_BY_ADCODE = "https://"

@@ -1,5 +1,4 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
-import Vue from 'vue'
 import {plugins, toolbar, scale, mapType, controlBar} from "../plugins/plugins";
 import {INIT_POS} from "./config";
 // import {geolcation} from './init'
@@ -17,7 +16,7 @@ export function init($el,vue){
         //     "version": '1.3.2'  // Loca 版本，缺省 1.3.2
         // },
     }).then((AMap)=>{
-        Vue.prototype.AMap=AMap;
+        vue.$store.commit("setAMap",AMap)
         initMap($el,vue)
         initPlugins(vue)
     }).catch(e => {
@@ -25,27 +24,29 @@ export function init($el,vue){
     })
 }
 function initMap($el,vue){
-    Vue.prototype.Map = new vue.AMap.Map($el, {
+    let Map = new vue.$store.state.AMap.Map($el, {
                 center: INIT_POS,
                 layers: [
                     // 默认是交通地图
                     //使用多个图层,也可以后面使用map.add 添加新图层
-                    new vue.AMap.TileLayer.Satellite(), // 街道地图
-                    new vue.AMap.TileLayer.RoadNet() // 道路地图
+                    new vue.$store.state.AMap.TileLayer.Satellite(), // 街道地图
+                    new vue.$store.state.AMap.TileLayer.RoadNet() // 道路地图
                 ],
                 // pitch:50,
                 viewMode:'3D',
                 zoom:15
             })
+    vue.$store.commit("setMap",Map)
     vue.$log.debug("Map init success")
 }
 function initPlugins(vue){
-    vue.Map.plugin(plugins,function(){
+    vue.$store.state.Map.plugin(plugins,function(){
         //异步同时加载多个插件
-        vue.Map.addControl(mapType(vue));
-        vue.Map.addControl(toolbar(vue));
-        vue.Map.addControl(controlBar(vue));
-        vue.Map.addControl(scale(vue));
+        mapType(vue)
+        // vue.$store.state.Map.addControl();
+        vue.$store.state.Map.addControl(toolbar(vue));
+        vue.$store.state.Map.addControl(controlBar(vue));
+        vue.$store.state.Map.addControl(scale(vue));
         // map.addControl(geolcation(AMap));
 
         // var mousetool = new AMap.MouseTool(map);
