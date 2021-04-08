@@ -30,6 +30,7 @@
 <script>
 import SearchList from "./SearchList";
 import SearchComplete from "./SearchComplete";
+import {errorMessage, warnMessage} from "../util/messageUtil";
 export default {
   name: "Search",
   components: {SearchList,SearchComplete},
@@ -42,13 +43,24 @@ export default {
   },
   methods:{
     search(){
-      if(this.showSearchComplete==true){
-        this.showSearchComplete=false
-      }
-      this.showSearchList = true;
-      this.$refs.searchList.search()
+      this.$refs.searchList.search().then(res=>{
+        if(res.data.status==1){
+          if(res.data.count!=0){
+            this.$refs.searchList.places = res.data.pois
+            this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
+            if(this.showSearchComplete==true){
+              this.showSearchComplete=false
+            }
+            this.showSearchList = true;
+          }else{
+            this.$message(warnMessage('未查询到结果'))
+          }
+        }else {
+          this.$message(errorMessage(res.data.info))
+        }
+      })
     },
-    async complete(){
+    complete(){
       if(this.showSearchList==true){
         this.showSearchList=false;
       }
@@ -59,7 +71,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   #search{
     /*border: 1px red solid;*/
     height: 4.31%;
@@ -67,7 +79,7 @@ export default {
     z-index: 9999;
     /*padding:5px;*/
     vertical-align: center;
-    margin: 0.5% 0.5% 0.5% 1%;
+    margin: 0.5% 0.5% 0px 1%;
     background-color: #ffffff;
   }
   #search>>>.el-input__inner{

@@ -3,8 +3,7 @@
   <el-col :span="5" id="searchList">
     <el-menu
         v-for="(place,index) in places"
-        v-bind:key="index"
-        >
+        v-bind:key="index">
       <el-menu-item index="index"
                     @keypress.enter.native="location(place)"
                     @click.native="location(place)">
@@ -16,21 +15,26 @@
   </el-collapse-transition>
 </template>
 <script>
+import {autoComplete} from "../plugins/plugins";
+
 export default {
   name: "Complete",
   data(){
     return {
       places:[],
       input:"",
-      autoComplete:null,
+      autoComplete:this.AMap,
     }
   },
-  created() {
-    this.input = this.$route.params.keyword
-    this.autoComplete = new this.AMap.AutoComplete({
-      // city:"郑州",
-      citylimit:false,
-    });
+  watch(){
+    autoComplete(){
+      this.input = this.$route.params.keyword
+      this.autoComplete = new this.AMap.AutoComplete({
+        // city:"郑州",
+        citylimit:false,
+      });
+      this.$log.debug("autocomplete init success")
+    }
   },
   methods:{
     search(keyword){
@@ -42,7 +46,7 @@ export default {
     },
     location(place){
       this.$message(place.name)
-    }
+    },
   }
 }
 </script>

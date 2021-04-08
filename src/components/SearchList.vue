@@ -1,18 +1,28 @@
 <template>
   <el-collapse-transition>
-      <el-col id="searchList" :span="5">
+      <el-col id="searchList" :span="5"
+      >
           <el-row
               v-for="(place,index) in places"
               v-bind:key="index"
               @keypress.enter.native="location(place)"
               @click.native="location(place)">
-              <el-col :span="4">
-                <el-image src="/favicon.ico"></el-image>
+              <el-col :span="20">
+                <el-col :span="24">{{index+1}} {{place.name}}</el-col>
+                <el-col :span="24" v-if="place.address!=''">
+                  <span style="font-size: 10px;color: #C0C4CC;">
+                    {{place.address}}
+                  </span>
+                </el-col>
               </el-col>
-              <el-col :span="20">{{place.address}}</el-col>
+              <el-col :span="4">
+                <el-image :src="place.photos[0].url" v-if="place.photos.length!=0"></el-image>
+              </el-col>
           </el-row>
         <el-pagination
+            style="text-align: center"
             :page-size="page_size"
+            :pager-count="5"
             :hide-on-single-page="value"
             :current-page.sync="current_page"
             @current-change="getPlacesList"
@@ -35,20 +45,24 @@ export default {
       current_page:1,
       // input:'',
       value:true,
-      page_size:8
+      page_size:20,
+      select:0
     }
   },
   methods:{
     search(){
       this.current_page=1
-      this.getPlacesList(1)
+      return search(1,this.input,this)
     },
     getPlacesList(pageNumber){
-      search(pageNumber,this.input,this)
+      search(pageNumber,this.input,this).then(res=>{
+        this.places = res.data.pois
+        this.total = Number(res.data.count)>this.page_size*100?this.page_size*100:Number(res.data.count)
+      })
     },
     location(place){
       this.$message(place.address)
-    }
+    },
   }
 }
 </script>
@@ -86,6 +100,7 @@ export default {
 }
 .el-row{
   margin: 0 4% 0 4%;
+  padding:  5% 0 2% 0;
   vertical-align: middle;
   height: 100px;
 }
