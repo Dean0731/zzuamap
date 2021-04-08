@@ -1,5 +1,5 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
-import {plugins, toolbar, scale, mapType, controlBar} from "../plugins/plugins";
+import {plugins, toolbar, scale, mapType, controlBar, autoComplete} from "../plugins/plugins";
 import {INIT_POS} from "./config";
 // import {geolcation} from './init'
 
@@ -43,10 +43,12 @@ function initPlugins(vue){
     vue.$store.state.Map.plugin(plugins,function(){
         //异步同时加载多个插件
         mapType(vue)
+        vue.$store.commit("setAutoComplete",autoComplete(vue))
         // vue.$store.state.Map.addControl();
         vue.$store.state.Map.addControl(toolbar(vue));
         vue.$store.state.Map.addControl(controlBar(vue));
         vue.$store.state.Map.addControl(scale(vue));
+
         // map.addControl(geolcation(AMap));
 
         // var mousetool = new AMap.MouseTool(map);

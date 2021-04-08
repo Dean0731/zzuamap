@@ -61,12 +61,12 @@ export default {
 #search{
   /*border: 1px red solid;*/
   height: 4.31%;
-  right: 0px;
+  right: 4%;
   position: fixed;
   z-index: 9999;
-  /*padding:5px;*/
   vertical-align: center;
   margin: 0.5% 1% 0px 0.5%;
   background-color: #ffffff;
 }
+
 </style>

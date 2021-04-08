@@ -7,8 +7,7 @@
               v-bind:key="index">
               <el-col :span="18"
                       @keypress.enter.native="location(place)"
-                      @click.native="location(place)"
-              >
+                      @click.native="location(place)">
                 <el-col :span="24">{{index+1}} {{place.name}}</el-col>
                 <el-col :span="24" v-if="place.address!=''">
                   <span style="font-size: 10px;color: #C0C4CC;">
@@ -43,7 +42,6 @@
           </el-pagination>
         </el-col>
       </el-col>
-
   </el-collapse-transition>
 </template>
 <script>

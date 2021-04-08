@@ -27,23 +27,9 @@ export default {
   created() {
     this.input = this.$route.params.keyword
   },
-  watch:{
-    getAMap(){
-      this.autoComplete = new this.$store.state.AMap.AutoComplete({
-        // city:"郑州",
-        citylimit:false,
-      });
-      this.$log.debug("autocomplete init success")
-    }
-  },
-  computed:{
-    getAMap(){
-      return this.$store.state.AMap;
-    }
-  },
   methods:{
     search(keyword){
-      this.autoComplete.search(keyword,(status,result)=>{
+      this.$store.state.AutoComplete.search(keyword,(status,result)=>{
         if(status=="complete"){
           this.places = result.tips;
         }
@@ -51,6 +37,7 @@ export default {
     },
     location(place) {
       this.$store.state.Location(place,this)
+      this.hidden
     }
   }
 }

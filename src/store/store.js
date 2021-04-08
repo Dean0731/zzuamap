@@ -21,6 +21,7 @@ export default new Vuex.Store({
        MarkerLayer:null,
        MapType:null,
        Polygon:null,
+       AutoComplete:null,
        Location:function (location,vue){
            if(this.MarkerLayer!=null){
                vue.$store.state.Map.remove(this.MarkerLayer)
@@ -32,6 +33,7 @@ export default new Vuex.Store({
                vue.$log.debug(location)
                vue.$store.state.Map.setFitView(null, false, [150, 60, 100, 60])
                let locArray=null;
+               let arr = []
                if(typeof location.location == "object"){
                    locArray = [location.location.lng,location.location.lat]
                }else if(typeof location.location == 'string'){
@@ -41,9 +43,8 @@ export default new Vuex.Store({
                vue.$store.state.Map.setCenter(locArray);
                this.MarkerLayer = createMarkerByLocation(vue.$store.state.AMap,locArray);
                vue.$store.state.Map.add(this.MarkerLayer)
-               if(location.shape!=""){
+               if(location.shape!="" && location.shape !=undefined){
                    let strlocArray = location.shape.split("_")
-                   let arr = []
                    strlocArray.forEach(str=>arr.push(locationStrToPxPy(str)))
                    this.Polygon = createShape(arr,vue)
                }
@@ -63,6 +64,9 @@ export default new Vuex.Store({
         },
         setMapType(state,obj){
            state.MapType = obj;
+        },
+        setAutoComplete(state,obj){
+           state.AutoComplete = obj;
         }
     }
 });

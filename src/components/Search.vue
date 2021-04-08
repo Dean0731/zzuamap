@@ -1,13 +1,11 @@
 <template>
-  <el-row>
+  <el-row >
     <el-col :span="5" id="search">
-      <el-col :span="4" class="ico">
-        <i class="el-icon-map-location"></i>
-      </el-col>
-      <el-col :span="16">
+      <el-col :span="20">
         <el-input
             id = "input_id"
             v-model="input"
+            prefix-icon="el-icon-map-location"
             placeholder="请输入城市名"
             @keypress.enter.native="search"
             @input="complete">
@@ -20,11 +18,19 @@
         </span>
       </el-col>
       <el-col>
-<!--        <router-view ref="view"></router-view>-->
-        <SearchList :input="input" v-show="showSearchList" ref="searchList"></SearchList>
-        <SearchComplete :input="input" v-show="showSearchComplete" ref="searchComplete"></SearchComplete>
-        <el-col id="title" :span="5" style="font-size: 20px;color: cornflowerblue;text-align: center" v-if="showSearchList==true" @click.native="hide">{{data}}</el-col>
+        <el-collapse-transition>
+          <SearchList :input="input" v-show="showResult" ref="searchList"></SearchList>
+        </el-collapse-transition>
+        <el-collapse-transition>
+          <SearchComplete :input="input" v-show="showComplete" ref="searchComplete"></SearchComplete>
+        </el-collapse-transition>
       </el-col>
+
+    <el-collapse-transition>
+      <el-col v-if="showTitle">
+        <el-col class="title" v-if="showResult==false" @click.native="hide">展开搜索结果</el-col>
+      </el-col>
+    </el-collapse-transition>
     </el-col>
   </el-row>
 </template>
@@ -37,31 +43,30 @@ export default {
   components: {SearchList,SearchComplete},
   data() {
     return {
-      data:"显示结果",
       input: "",
-      showSearchList:false,
-      showSearchComplete:false,
+      showComplete:false,
+      showResult:false,
+      showTitle:false,
     }
   },
   methods:{
     hide(){
-      if(this.data=="隐藏结果"){
-        this.data ="显示结果";
-      }else{
-        this.showSearchList = false;
-        this.data = "隐藏结果";
-      }
+      this.showResult = true;
+    },
+    click(){
+      this.showResult=false
+      this.showComplete=false
     },
     search(){
+      this.$store.state.Map.on("click",this.click)
       this.$refs.searchList.search().then(res=>{
         if(res.data.status==1){
           if(res.data.count!=0){
             this.$refs.searchList.places = res.data.pois
             this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
-            if(this.showSearchComplete==true){
-              this.showSearchComplete=false
-            }
-            this.showSearchList = true;
+            this.showComplete=false
+            this.showResult = true;
+            this.showTitle = true
           }else{
             this.$message(warnMessage('未查询到结果'))
           }
@@ -71,10 +76,8 @@ export default {
       })
     },
     complete(){
-      if(this.showSearchList==true){
-        this.showSearchList=false;
-      }
-      this.showSearchComplete = true;
+      this.showComplete = true
+      this.showTitle = false
       this.$refs.searchComplete.search(this.input)
     }
   }
@@ -100,8 +103,14 @@ export default {
     text-align: center;font-size:30px;
     cursor: pointer;
   }
-  #title{
+  .title{
     position: relative;
     z-index: 9999;
+    background-color: white;
+    /*font-size: 20px;*/
+    height: 30px;
+    padding-top: 5px;
+    color: cornflowerblue;
+    text-align: center
   }
 </style>
