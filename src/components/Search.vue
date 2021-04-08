@@ -49,6 +49,16 @@ export default {
       showTitle:false,
     }
   },
+  computed:{
+    getMap(){
+      return this.$store.state.Map
+    }
+  },
+  watch:{
+    getMap(){
+      this.$store.state.Map.on("click",this.click)
+    }
+  },
   methods:{
     hide(){
       this.showResult = true;
@@ -58,7 +68,6 @@ export default {
       this.showComplete=false
     },
     search(){
-      this.$store.state.Map.on("click",this.click)
       this.$refs.searchList.search().then(res=>{
         if(res.data.status==1){
           if(res.data.count!=0){
