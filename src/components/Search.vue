@@ -1,43 +1,39 @@
 <template>
-  <el-row >
     <el-col :span="5" id="search">
-      <el-col :span="20">
         <el-input
-            id = "input_id"
             v-model="input"
             prefix-icon="el-icon-map-location"
             placeholder="请输入城市名"
             @keypress.enter.native="search"
             @input="complete">
+          <el-button slot="append"
+              icon="el-icon-search"
+              @click="search">
+          </el-button>
         </el-input>
-      </el-col>
-      <el-col :span="4" class="ico">
-        <span
-            class="el-icon-search"
-            @click="search">
-        </span>
-      </el-col>
-      <el-col>
-        <el-collapse-transition>
-          <SearchList :input="input" v-show="showResult" ref="searchList"></SearchList>
-        </el-collapse-transition>
-        <el-collapse-transition>
-          <SearchComplete :input="input" v-show="showComplete" ref="searchComplete"></SearchComplete>
-        </el-collapse-transition>
-      </el-col>
+      <el-menu class="el-menu-demo" mode="horizontal">
 
-    <el-collapse-transition>
-      <el-col v-if="showTitle">
-        <el-col class="title" v-if="showResult==false" @click.native="hide">展开搜索结果</el-col>
-      </el-col>
-    </el-collapse-transition>
+        <el-menu-item v-for="(name,index) in data" v-bind:key="index" style="padding:0px 0px 0px 5% ;">
+            <i class="el-icon-school"></i>
+            <span @click="handleSelect(index+1)">{{name}}</span>
+        </el-menu-item>
+      </el-menu>
+        <el-collapse-transition>
+          <SearchList :input="input"  v-show="showResult" ref="searchList"></SearchList>
+        </el-collapse-transition>
+        <el-collapse-transition>
+          <SearchComplete ref="searchComplete" v-show="showComplete"></SearchComplete>
+        </el-collapse-transition>
+      <transition v-if="showTitle" name="el-fade-in-linear">
+          <el-col class="title" v-if="showResult==false" @click.native="hide">展开搜索结果</el-col>
+      </transition>
     </el-col>
-  </el-row>
 </template>
 <script>
 import SearchList from "./SearchList";
 import SearchComplete from "./SearchComplete";
 import {errorMessage, warnMessage} from "../util/messageUtil";
+import {FOUR_SCHOOL_Location} from "../config/config";
 export default {
   name: "Search",
   components: {SearchList,SearchComplete},
@@ -47,6 +43,7 @@ export default {
       showComplete:false,
       showResult:false,
       showTitle:false,
+      data:['新校区','南校区','北校区','医学院']
     }
   },
   computed:{
@@ -68,12 +65,13 @@ export default {
       this.showComplete=false
     },
     search(){
+      this.showComplete=false
       this.$refs.searchList.search().then(res=>{
         if(res.data.status==1){
           if(res.data.count!=0){
             this.$refs.searchList.places = res.data.pois
-            this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
-            this.showComplete=false
+            // this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
+            this.$refs.searchList.page_count = Number(res.data.count)<this.$refs.searchList.page_size?1:parseInt(Number(res.data.count)/this.$refs.searchList.page_size);
             this.showResult = true;
             this.showTitle = true
           }else{
@@ -86,8 +84,12 @@ export default {
     },
     complete(){
       this.showComplete = true
+      this.showResult = false
       this.showTitle = false
       this.$refs.searchComplete.search(this.input)
+    },
+    handleSelect(index){
+      this.$store.state.Location(FOUR_SCHOOL_Location[index],this)
     }
   }
 }
@@ -95,31 +97,18 @@ export default {
 
 <style>
   #search{
-    /*border: 1px red solid;*/
     height: 4.31%;
     position: fixed;
     z-index: 9999;
-    /*padding:5px;*/
-    vertical-align: center;
-    margin: 0.5% 0.5% 0px 1%;
-    background-color: #ffffff;
-  }
-  #search>>>.el-input__inner{
-    border: none;
-    /*padding-left: 10px;*/
-  }
-  .ico{
-    text-align: center;font-size:30px;
-    cursor: pointer;
+    top:1%;
+    left: 1%;
   }
   .title{
     position: relative;
     z-index: 9999;
-    background-color: white;
-    /*font-size: 20px;*/
-    height: 30px;
-    padding-top: 5px;
+    padding: 5px;
     color: cornflowerblue;
-    text-align: center
+    text-align: center;
+    background-color: #ffffff;
   }
 </style>

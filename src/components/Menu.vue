@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="6" id="search">
+  <el-col :span="6" id="menu">
     <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1">卫星</el-menu-item>
       <el-submenu index="2">
@@ -58,15 +58,12 @@ export default {
 </script>
 
 <style scoped>
-#search{
-  /*border: 1px red solid;*/
+#menu{
   height: 4.31%;
-  right: 4%;
   position: fixed;
   z-index: 9999;
-  vertical-align: center;
-  margin: 0.5% 1% 0px 0.5%;
-  background-color: #ffffff;
+  top:1%;
+  left: 70%;
 }
 
 </style>

@@ -1,7 +1,6 @@
 <template>
   <el-collapse-transition>
       <el-col id="searchList" :span="5">
-        <el-col :span="24">
           <el-row
               v-for="(place,index) in places"
               v-bind:key="index">
@@ -28,19 +27,17 @@
                 ></el-image>
               </el-col>
           </el-row>
-        </el-col>
-        <el-col :span="24">
           <el-pagination
               style="text-align: center"
               :page-size="page_size"
               :pager-count="5"
+              :page-count="page_count"
               :hide-on-single-page="value"
               :current-page.sync="current_page"
               @current-change="getPlacesList"
               layout="prev, pager, next"
-              :total="total">
+              >
           </el-pagination>
-        </el-col>
       </el-col>
   </el-collapse-transition>
 </template>
@@ -53,12 +50,10 @@ export default {
   data(){
     return {
       places:[],
-      total:0,
+      page_count:0,
       current_page:1,
-      // input:'',
       value:true,
       page_size:20,
-      select:0
     }
   },
   methods:{
@@ -69,7 +64,6 @@ export default {
     getPlacesList(pageNumber){
       search(pageNumber,this.input,this).then(res=>{
         this.places = res.data.pois
-        this.total = Number(res.data.count)>this.page_size*100?this.page_size*100:Number(res.data.count)
       })
     },
     location(place){
@@ -111,14 +105,11 @@ export default {
   max-height: 80%;
   position: fixed;
   z-index: 9999;
-  vertical-align: center;
   background-color: #ffffff;
   overflow-y: scroll;
 }
 .el-row{
-  margin: 0 4% 0 4%;
-  padding:  2% 0 2% 0;
-  vertical-align: middle;
+  padding:  2%;
   height: 100px;
 }
 .el-row:hover{

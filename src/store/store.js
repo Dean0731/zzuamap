@@ -31,16 +31,16 @@ export default new Vuex.Store({
            }
            if(location.location!=''){
                vue.$log.debug(location)
-               vue.$store.state.Map.setFitView(null, false, [150, 60, 100, 60])
                let locArray=null;
                let arr = []
                if(typeof location.location == "object"){
-                   locArray = [location.location.lng,location.location.lat]
+                   locArray = location.location
                }else if(typeof location.location == 'string'){
                    locArray = locationStrToPxPy(location.location)
                }
                // vue.$store.state.Map.setZoomAndCenter(17,locArray);
                vue.$store.state.Map.setCenter(locArray);
+
                this.MarkerLayer = createMarkerByLocation(vue.$store.state.AMap,locArray);
                vue.$store.state.Map.add(this.MarkerLayer)
                if(location.shape!="" && location.shape !=undefined){
@@ -48,6 +48,7 @@ export default new Vuex.Store({
                    strlocArray.forEach(str=>arr.push(locationStrToPxPy(str)))
                    this.Polygon = createShape(arr,vue)
                }
+               vue.$store.state.Map.setFitView(null, false, [150, 60, 100, 60])
            }
 
        }

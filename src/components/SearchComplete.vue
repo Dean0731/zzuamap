@@ -1,17 +1,17 @@
 <template>
   <el-collapse-transition>
-  <el-col :span="5" id="searchList">
-    <el-menu
-        v-for="(place,index) in places"
-        v-bind:key="index">
-      <el-menu-item index="index"
-                    @keypress.enter.native="location(place)"
-                    @click.native="location(place)">
-        <i class="fa fa-map-marker" style="margin-right: 2%"></i>
-        <span slot="title" >{{place.name}}</span>
-      </el-menu-item>
-    </el-menu>
-  </el-col>
+    <el-col :span="5" id="searchList">
+      <el-menu>
+        <el-menu-item
+                      v-for="(place,index) in places"
+                      v-bind:key="index"
+                      @keypress.enter.native="location(place)"
+                      @click.native="location(place)">
+          <i class="fa fa-map-marker" style="margin-right: 2%"></i>
+          <span slot="title" >{{place.name}}</span>
+        </el-menu-item>
+      </el-menu>
+    </el-col>
   </el-collapse-transition>
 </template>
 <script>
@@ -20,12 +20,7 @@ export default {
   data(){
     return {
       places:[],
-      input:"",
-      autoComplete:this.AMap,
     }
-  },
-  created() {
-    this.input = this.$route.params.keyword
   },
   methods:{
     search(keyword){
@@ -37,7 +32,6 @@ export default {
     },
     location(place) {
       this.$store.state.Location(place,this)
-      this.hidden
     }
   }
 }

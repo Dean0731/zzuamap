@@ -23,14 +23,14 @@ export function init($el,vue){
         vue.$log.error(e);
     })
 }
-function initMap($el,vue){
+export function initMap($el,vue){
     let Map = new vue.$store.state.AMap.Map($el, {
                 center: INIT_POS,
                 layers: [
                     // 默认是交通地图
                     //使用多个图层,也可以后面使用map.add 添加新图层
-                    new vue.$store.state.AMap.TileLayer.Satellite(), // 街道地图
-                    new vue.$store.state.AMap.TileLayer.RoadNet() // 道路地图
+                    // new vue.$store.state.AMap.TileLayer.Satellite(), // 街道地图
+                    // new vue.$store.state.AMap.TileLayer.RoadNet() // 道路地图
                 ],
                 // pitch:50,
                 viewMode:'3D',
@@ -39,7 +39,7 @@ function initMap($el,vue){
     vue.$store.commit("setMap",Map)
     vue.$log.debug("Map init success")
 }
-function initPlugins(vue){
+export function initPlugins(vue){
     vue.$store.state.Map.plugin(plugins,function(){
         //异步同时加载多个插件
         mapType(vue)
