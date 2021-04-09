@@ -10,10 +10,8 @@ export const plugins = [
         'AMap.MapType',
         'AMap.Scale',
         'AMap.Geolocation',
-        "AMap.HawkEye",
         "AMap.PlaceSearch",
         "AMap.ControlBar",
-        "AMap.AdvancedInfoWindow",
         "AMap.MouseTool",
         "AMap.AutoComplete",
 ]

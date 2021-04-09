@@ -24,5 +24,6 @@ pnpm-debug.log*
 
 # git add . && git commit -m "init" && git push
 
-# 插件添加 css
-# 点解左侧位置目录  autocomplete.js  修改
+
+# 1, api 与web js 服务查看
+

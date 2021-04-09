@@ -46,7 +46,7 @@ import {search} from "../function/search";
 
 export default {
   name: "SearchList",
-  props:['input'],
+  props:['input','city'],
   data(){
     return {
       places:[],

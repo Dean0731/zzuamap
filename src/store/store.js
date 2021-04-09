@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {createMarkerByLocation} from "../util/createMarkerUtil";
 import createShape from "../util/shapeUtil";
+import {warnMessage} from "../util/messageUtil";
 Vue.use(Vuex)
 export function locationStrToPxPy(locationstr){
     // "px,px"  ->  [px,py]
@@ -23,19 +24,17 @@ export default new Vuex.Store({
        Polygon:null,
        AutoComplete:null,
        Location:function (location,vue){
-           if(this.MarkerLayer!=null){
-               vue.$store.state.Map.remove(this.MarkerLayer)
-           }
-           if(this.Polygon!=null){
-               vue.$store.state.Map.remove(this.Polygon)
-           }
-           if(location.location!=''){
-               vue.$log.debug(location)
-               let locArray=null;
-               let arr = []
-               if(typeof location.location == "object"){
-                   locArray = location.location
-               }else if(typeof location.location == 'string'){
+           vue.$log.debug(location)
+           // let clear = [this.MarkerLayer,this.Polygon]
+           // clear.forEach(i=>{
+           //     if(i!=null){
+           //         vue.$store.state.Map.remove(i)
+           //     }
+           // })
+           vue.$store.state.Map.clearMap()
+           let locArray= location.location;
+           if(locArray!=''&location!=null){
+                if(typeof location.location == 'string'){
                    locArray = locationStrToPxPy(location.location)
                }
                // vue.$store.state.Map.setZoomAndCenter(17,locArray);
@@ -44,11 +43,11 @@ export default new Vuex.Store({
                this.MarkerLayer = createMarkerByLocation(vue.$store.state.AMap,locArray);
                vue.$store.state.Map.add(this.MarkerLayer)
                if(location.shape!="" && location.shape !=undefined){
-                   let strlocArray = location.shape.split("_")
-                   strlocArray.forEach(str=>arr.push(locationStrToPxPy(str)))
-                   this.Polygon = createShape(arr,vue)
+                   this.Polygon = createShape(shapeStrToArray(location.shape),vue)
                }
                vue.$store.state.Map.setFitView(null, false, [150, 60, 100, 60])
+           }else{
+               vue.$message(warnMessage("请选择详细地址"))
            }
 
        }
@@ -71,4 +70,11 @@ export default new Vuex.Store({
         }
     }
 });
+
+function shapeStrToArray(shapeStr){
+    let arr = []
+    let strlocArray = shapeStr.split("_")
+    strlocArray.forEach(str=>arr.push(locationStrToPxPy(str)))
+    return arr;
+}
 

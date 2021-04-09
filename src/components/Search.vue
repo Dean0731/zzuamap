@@ -19,7 +19,7 @@
         </el-menu-item>
       </el-menu>
         <el-collapse-transition>
-          <SearchList :input="input"  v-show="showResult" ref="searchList"></SearchList>
+          <SearchList :input="input" :city="city" v-show="showResult" ref="searchList"></SearchList>
         </el-collapse-transition>
         <el-collapse-transition>
           <SearchComplete ref="searchComplete" v-show="showComplete"></SearchComplete>
@@ -32,18 +32,21 @@
 <script>
 import SearchList from "./SearchList";
 import SearchComplete from "./SearchComplete";
-import {errorMessage, warnMessage} from "../util/messageUtil";
 import {FOUR_SCHOOL_Location} from "../config/config";
+import {handler, searchCity} from "../function/search";
+import {locationStrToPxPy} from "../store/store";
+import {successMessage, warnMessage} from "../util/messageUtil";
 export default {
   name: "Search",
   components: {SearchList,SearchComplete},
   data() {
     return {
       input: "",
+      city:null,
       showComplete:false,
       showResult:false,
       showTitle:false,
-      data:['新校区','南校区','北校区','医学院']
+      data:['新校区','南校区','北校区','医学院'],
     }
   },
   computed:{
@@ -66,20 +69,24 @@ export default {
     },
     search(){
       this.showComplete=false
+      searchCity(this.input,this).then(res=>{
+       handler(res,()=>{
+         this.$store.state.Map.setCenter(locationStrToPxPy(res.data.districts[0].center))
+         this.$message(successMessage("切换到"+res.data.districts[0].name))
+         this.city = res.data.districts[0].adcode;
+       },this.search2,this)
+      })
+
+    },
+    search2(){
       this.$refs.searchList.search().then(res=>{
-        if(res.data.status==1){
-          if(res.data.count!=0){
-            this.$refs.searchList.places = res.data.pois
-            // this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
-            this.$refs.searchList.page_count = Number(res.data.count)<this.$refs.searchList.page_size?1:parseInt(Number(res.data.count)/this.$refs.searchList.page_size);
-            this.showResult = true;
-            this.showTitle = true
-          }else{
-            this.$message(warnMessage('未查询到结果'))
-          }
-        }else {
-          this.$message(errorMessage(res.data.info))
-        }
+        handler(res,()=>{
+          this.$refs.searchList.places = res.data.pois
+          // this.$refs.searchList.total = Number(res.data.count)>this.$refs.searchList.page_size*100?this.$refs.searchList.page_size*100:Number(res.data.count)
+          this.$refs.searchList.page_count = Number(res.data.count)<this.$refs.searchList.page_size?1:parseInt(Number(res.data.count)/this.$refs.searchList.page_size);
+          this.showResult = true;
+          this.showTitle = true
+        },()=>{this.$message(warnMessage('未查询到结果'))},this)
       })
     },
     complete(){

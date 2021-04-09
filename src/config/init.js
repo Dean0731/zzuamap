@@ -18,26 +18,42 @@ export function init($el,vue){
     }).then((AMap)=>{
         vue.$store.commit("setAMap",AMap)
         initMap($el,vue)
-        initPlugins(vue)
     }).catch(e => {
         vue.$log.error(e);
     })
 }
 export function initMap($el,vue){
-    let Map = new vue.$store.state.AMap.Map($el, {
-                center: INIT_POS,
-                layers: [
-                    // 默认是交通地图
-                    //使用多个图层,也可以后面使用map.add 添加新图层
-                    // new vue.$store.state.AMap.TileLayer.Satellite(), // 街道地图
-                    // new vue.$store.state.AMap.TileLayer.RoadNet() // 道路地图
-                ],
-                // pitch:50,
-                viewMode:'3D',
-                zoom:15
-            })
-    vue.$store.commit("setMap",Map)
-    vue.$log.debug("Map init success")
+    vue.$store.state.AMap.plugin(['AMap.IndoorMap'], function() {
+        let Map = new vue.$store.state.AMap.Map($el, {
+            center: INIT_POS,
+            // features: ['bg', 'road', 'point'],
+            features: ['road','point'],
+            // mapStyle: 'amap://styles/light',
+            showIndoorMap:false,
+            layers: [
+                new vue.$store.state.AMap.Buildings({
+                    heightFactor: 1,
+                    wallColor: [181,185,181, 0.5],
+                    roofColor: 'rgba(181,185,181,0.5)',
+                    visible:false,
+                }),
+                new vue.$store.state.AMap.IndoorMap(),
+                vue.$store.state.AMap.createDefaultLayer(),
+
+                // 默认是交通地图
+                //使用多个图层,也可以后面使用map.add 添加新图层
+                // new vue.$store.state.AMap.TileLayer.Satellite(), // 街道地图
+                // new vue.$store.state.AMap.TileLayer.RoadNet() // 道路地图
+            ],
+            // pitch:50,
+            viewMode:'3D',
+            zoom:15
+        })
+        vue.$store.commit("setMap",Map)
+        vue.$log.debug("Map init success")
+        initPlugins(vue)
+    });
+
 }
 export function initPlugins(vue){
     vue.$store.state.Map.plugin(plugins,function(){
@@ -48,12 +64,7 @@ export function initPlugins(vue){
         vue.$store.state.Map.addControl(toolbar(vue));
         vue.$store.state.Map.addControl(controlBar(vue));
         vue.$store.state.Map.addControl(scale(vue));
-
         // map.addControl(geolcation(AMap));
-
-        // var mousetool = new AMap.MouseTool(map);
-        // 使用鼠标工具，在地图上画标记点
-        // mousetool.marker();
 
     });
     vue.$log.debug("Map plugins init success")

@@ -1,4 +1,3 @@
-
 export function rule(vue){
     let AMap = vue.$store.state.AMap;
     let map = vue.$store.state.Map;
@@ -54,6 +53,7 @@ export function measureArea(vue){
     }
     mouseTool.measureArea({
         strokeColor:'#d4625f',
+        strokeWeight:4,
         fillColor:'#d4625f',
         fillOpacity:0.3
         //同 Polygon 的 Option 设置

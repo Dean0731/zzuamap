@@ -3,7 +3,7 @@ export default function createShape(arr,vue){
         map: vue.$store.state.Map,
         strokeColor: "#d4625f",
         strokeOpacity: 1,
-        strokeWeight: 1,
+        strokeWeight: 4,
         fillColor: '#d4625f',
         fillOpacity: 0.15,
         strokeStyle: "solid",
